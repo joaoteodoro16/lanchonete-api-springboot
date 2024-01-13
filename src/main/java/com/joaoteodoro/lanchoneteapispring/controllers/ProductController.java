@@ -35,6 +35,13 @@ public class ProductController {
         produto.update(product);
     }
 
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void delete(@PathVariable Long id){
+        repository.deleteById(id);
+    }
+
+
 
 
 
