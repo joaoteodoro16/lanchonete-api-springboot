@@ -23,6 +23,10 @@ public record ProductDTO(
         //    private Enum enum;
 ) {
 
+        public ProductDTO(Product product){
+                this(product.getName(), product.getPrice(),product.getDescription(),product.getSector(),product.getStock(),product.getCreated_at());
+        }
+
 
 
 }
