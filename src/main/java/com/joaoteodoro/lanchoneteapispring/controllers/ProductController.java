@@ -19,12 +19,16 @@ public class ProductController {
 
     @PostMapping
     @Transactional //Faz o RollBack, a transação seja revertida
-    public ResponseEntity<ProductDTO> register(@RequestBody @Valid ProductDTO product, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<ProductResponseDTO> register(@RequestBody @Valid ProductDTO product, UriComponentsBuilder uriBuilder){
         var produto = new Product(product);
         repository.save(produto);
-        var uri =  uriBuilder.path("/produtos/${id}").buildAndExpand(produto.getId()).toUri();
+        //var uri =  uriBuilder.path("/produtos/${id}").buildAndExpand(produto.getId()).toUri();
+        var uri = uriBuilder.path("/produtos/{id}")
+                .buildAndExpand(produto.getId())
+                .encode()
+                .toUri();
 
-        return ResponseEntity.created(uri).body(new ProductDTO(produto));
+        return ResponseEntity.created(uri).body(new ProductResponseDTO(produto));
     }
 
     @GetMapping
@@ -36,10 +40,10 @@ public class ProductController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity<ProductDTO> update(@RequestBody @Valid ProductUpdateDTO product){
+    public ResponseEntity<ProductResponseDTO> update(@RequestBody @Valid ProductUpdateDTO product){
         Product produto = repository.getReferenceById(product.id());
         produto.update(product);
-        return ResponseEntity.ok(new ProductDTO(produto));
+        return ResponseEntity.ok(new ProductResponseDTO(produto));
     }
 
     @DeleteMapping("/{id}")
@@ -55,5 +59,11 @@ public class ProductController {
         Product produto = repository.getReferenceById(id);
         produto.inactive();
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id){
+        var product = repository.getReferenceById(id);
+        return ResponseEntity.ok(new ProductResponseDTO(product));
     }
 }
