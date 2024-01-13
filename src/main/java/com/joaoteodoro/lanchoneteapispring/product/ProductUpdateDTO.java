@@ -11,7 +11,8 @@ public record ProductUpdateDTO(
         String price,
         String description,
         String sector,
-        String stock
+        String stock,
+        Boolean active
 ) {
 }
 

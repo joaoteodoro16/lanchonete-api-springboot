@@ -25,7 +25,7 @@ public class ProductController {
     @GetMapping
     public List<ProductResponseDTO> getAll(){
 //        return repository.findAll().stream().map(product -> new ProductResponseDTO(product)).toList();
-        return repository.findAll().stream().map(ProductResponseDTO::new).toList();
+        return repository.findAllByActiveTrue().stream().map(ProductResponseDTO::new).toList();
     }
 
     @PutMapping
@@ -41,9 +41,12 @@ public class ProductController {
         repository.deleteById(id);
     }
 
-
-
-
+    @DeleteMapping("inactive/{id}")
+    @Transactional //Identica que ouve uma alteração no registro e salva
+    public void inactive(@PathVariable Long id){
+        Product produto = repository.getReferenceById(id);
+        produto.inactive();
+    }
 
 
 }

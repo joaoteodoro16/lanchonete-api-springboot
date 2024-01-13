@@ -23,6 +23,7 @@ public class Product {
     private int sector;
     private int stock;
     private LocalDate created_at;
+    private Boolean active;
 
 //    Quando o atributo for um Enum, colocar dessa forma
 //    @Enumerated(EnumType.STRING)
@@ -35,6 +36,7 @@ public class Product {
         this.sector = product.sector();
         this.stock = product.stock();
         this.created_at = product.created_at();
+        this.active = true;
     }
 
     public void update(ProductUpdateDTO product) {
@@ -58,8 +60,20 @@ public class Product {
             if(product.stock() != null){
                 this.stock = Integer.parseInt(product.stock());
             }
+
+            if(product.active() != null){
+                this.active = product.active();
+            }
+
+
         } catch (NumberFormatException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public void inactive() {
+        this.active = false;
+    }
+
+
 }
